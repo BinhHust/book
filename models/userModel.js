@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema(
   {
@@ -33,21 +35,70 @@ const userSchema = new mongoose.Schema(
     },
     active: {
       type: Boolean,
-      default: false,
-      select: false
+      default: false
     },
-    photo: String,
+    photo: {
+      type: String,
+      default: 'default.jpg'
+    },
     role: {
       type: String,
       default: 'user',
       enum: ['user', 'admin', 'manager']
-    }
+    },
+    changedPasswordAt: Date,
+    verifyToken: String
   },
   {
     toJSON: { virtual: true },
     toObject: { virtual: true }
   }
 );
+
+// 1) document middleware
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+
+  // password dc update || 1 user moi dc tao ra
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+
+  next();
+});
+
+// 2) query middleware
+// userSchema.pre('find', function(next) {
+//   this.find({
+//     active: true
+//   });
+
+//   next();
+// });
+
+// 3) instance methods
+userSchema.methods.isCorrectPassword = async function(pwFromUse, pwInDB) {
+  return await bcrypt.compare(pwFromUse, pwInDB);
+};
+
+userSchema.methods.isChangedPassword = function(createdTokenAt) {
+  if (this.isChangedPasswordAt) {
+    const changedPasswordAt = this.changedPasswordAt.getTime(); // ms
+
+    return changedPasswordAt > createdTokenAt * 1000; // s
+  }
+  return false;
+};
+
+userSchema.methods.createVerifyToken = function() {
+  const token = crypto.randomBytes(32).toString('hex');
+
+  this.verifyToken = crypto
+    .createHash('sha256')
+    .update(token)
+    .digest('hex');
+
+  return token;
+};
 
 const User = mongoose.model('User', userSchema);
 

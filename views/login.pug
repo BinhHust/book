@@ -1,0 +1,15 @@
+extends base
+
+block content
+  .container
+      .row.justify-content-center
+        .col.col-6.border.border-dark.mt-5.p-3#login-container
+          form#login-form
+            .form-group
+              label(for="email") Email
+              input#email.form-control(type="email" placeholder="Enter email")
+            .form-group
+              label(for="password") Password
+              input#password.form-control(type="password" placeholder="Password")
+
+            button.btn.btn-info(type="submit") Login

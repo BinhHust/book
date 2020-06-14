@@ -1,0 +1,22 @@
+extends base
+
+block content
+  .container
+      .row.justify-content-center
+        .col.col-6.border.border-dark.mt-5.p-3#signup-container
+          form#signup-form
+            .form-group
+              label(for="name") Name
+              input#name.form-control(type="text" placeholder='Enter name')
+            .form-group
+              label(for="email") Email address
+              input#email.form-control(type="email" placeholder="Enter email")
+            .form-group
+              label(for="password") Password
+              input#password.form-control(type="password" placeholder="Password")
+              small.form-text.text-muted Password must be at least 8 characters.
+
+            .form-group
+              label(for="passwordConfirm") Password Confirm
+              input#passwordConfirm.form-control(type="password" placeholder="Password Confirm")
+            button.btn.btn-info#signup-btn(type="submit") Sign up
