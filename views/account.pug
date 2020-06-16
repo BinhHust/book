@@ -1,0 +1,69 @@
+extends base
+
+block content
+  .container
+    .row.my-5
+      .col-5
+        .border.border-dark.mb-3.p-3
+          h2 Update user data
+          form#update-data-form
+            .form-group
+              label(for="name") Name
+              input#name.form-control(type="text" value=`${user.name}`)
+            .form-group
+              label(for="email") Email
+              input#email.form-control(type="email" value=`${user.email}`)
+
+            .form-group.d-flex.align-items-center
+              img.rounded-circle.mr-1(src=`/img/users/${user.photo}` alt=`${user.name}` style=" width: 50px; height: 50px")
+              label.btn.btn-outline-success.m-0.ml-3(for="photo") Choose a photo
+              input#photo.form-control-file.d-none(type="file", accept="image/*", name="photo")
+
+            button.btn.btn-info Update data
+        
+        .border.border-dark.p-3.mb-3
+          h2 Update user password
+          form#update-password-form
+            .form-group
+              label(for="passwordCurrent") Current password
+              input#passwordCurrent.form-control(type="password" placeholder="Enter Current password")
+            .form-group
+              label(for="password") New Password
+              input#password.form-control(type="password" placeholder="Enter New Password")
+            .form-group
+              label(for="passwordConfirm") Confirm New Password
+              input#passwordConfirm.form-control(type="password" placeholder="Enter Confirm New Password")
+
+            button.btn.btn-info#update-password-button(type="submit") Update Password
+        
+        -if (user.shop)
+          .border.border-dark.p-3
+            h2 Update shop data
+            form#update-data-form
+              .form-group
+                label(for="name") Shop Name
+                input#shop-name.form-control(type="text" value=`${user.shop.name}`)
+              .form-group
+                label(for="shop-description") Shop Description
+                textarea#shop-description.form-control(rows="5")= user.shop.description
+
+            button.btn.btn-info Update Shop Data
+      .col-7
+        //- .border.border-dark.p-3
+        //-   h2 Create Shop
+        //-   form#login-form
+        //-     .form-group
+        //-       label(for="shop-name") Name 
+        //-       input#shop-name.form-control(type="text" placeholder="Enter shop name")
+        //-     .form-group
+        //-       label(for="shop-description") Description
+        //-       textarea#shop-description.form-control(rows="3")
+
+        //-     .form-group
+        //-       label Image Cover
+        //-       label.btn.btn-outline-success.m-0.ml-3(for="shop-image-cover") Choose a photo
+        //-       input#shop-image-cover.form-control-file.d-none(type="file")
+
+
+
+        //-     button.btn.btn-info(type="submit") Login

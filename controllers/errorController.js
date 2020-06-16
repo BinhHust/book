@@ -51,6 +51,10 @@ const handleErrorForDev = (req, res, err) => {
   }
 
   // Loi throw tu view
+  return res.status(err.statusCode).render('errorPage', {
+    title: 'error',
+    message: err.message
+  });
 };
 
 // For Prod
@@ -73,6 +77,17 @@ const handleErrorForProd = (req, res, err) => {
   }
 
   // Loi throw tu view
+  if (err.isOperational) {
+    return res.status(err.statusCode).render('errorPage', {
+      title: 'error',
+      message: err.message
+    });
+  }
+
+  res.status(err.statusCode).render('errorPage', {
+    title: 'error',
+    message: 'Please trying again.'
+  });
 };
 
 const globalErrorHander = (err, req, res, next) => {

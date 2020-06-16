@@ -13,7 +13,7 @@ export const showAlert = (message, type) => {
   const markup = `
     <div class="alert alert-${
       type === 'success' ? 'success' : 'danger'
-    }" role="alert">
+    }" role="alert" style="position: fixed; top: 0; left: 50%; transform: translateX(-50%); z-index: 10">
       ${message}
     </div>
   `;

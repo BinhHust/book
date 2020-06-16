@@ -140,7 +140,11 @@ exports.protect = catchAsync(async (req, res, next) => {
   const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
   // user exists ?
-  const currentUser = await User.findById(decode.id);
+  const currentUser = await User.findOne({
+    _id: decode.id,
+    active: true
+  }).populate('shop');
+
   if (!currentUser) {
     return next(new AppError('User is not exists.', 400));
   }
@@ -165,7 +169,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      const currentUser = await User.findById(decode.id);
+      const currentUser = await User.findOne({ _id: decode.id, active: true });
 
       if (!currentUser) {
         return next();
@@ -185,4 +189,33 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   }
 
   next();
+});
+
+// NOTE: restrict
+exports.restrict = (...roles) => (req, res, next) => {
+  if (roles.includes(req.user.role)) {
+    return next();
+  }
+
+  next(new AppError('You are not authorized to access this page.', 403));
+};
+
+// NOTE: Update Password
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const { passwordCurrent, password, passwordConfirm } = req.body;
+  console.log(passwordCurrent, password, passwordConfirm);
+  // get user
+  const user = await User.findById(req.user.id).select('+password');
+
+  // check currrent passwordsend
+  if (!(await user.isCorrectPassword(passwordCurrent, user.password))) {
+    return next(new AppError('Current password incorrect.', 401));
+  }
+  // update new password
+  user.password = password;
+  user.passwordConfirm = passwordConfirm;
+  await user.save();
+
+  // send token
+  sendToken(user, 200, req, res);
 });

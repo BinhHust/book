@@ -2,12 +2,16 @@
 import '@babel/polyfill';
 import { verifyToken } from './verifyToken';
 import { signup, logout, login } from './auth';
+import { updateSetting } from './updateSetting';
 
 const $verifyEmail = document.querySelector('.verify-email');
 const $signupForm = document.getElementById('signup-form');
 const $signupContainer = document.getElementById('signup-container');
 const $loginForm = document.getElementById('login-form');
 const $logoutBtn = document.getElementById('logout');
+const $updateDataForm = document.getElementById('update-data-form');
+const $updatePasswordForm = document.getElementById('update-password-form');
+const $updatePasswordButton = document.getElementById('update-password-button');
 
 if ($verifyEmail) {
   $verifyEmail.addEventListener('click', () => {
@@ -47,3 +51,35 @@ if ($loginForm) {
 if ($logoutBtn) {
   $logoutBtn.addEventListener('click', logout);
 }
+
+if ($updateDataForm)
+  $updateDataForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+
+    updateSetting(form, 'data');
+  });
+
+if ($updatePasswordForm)
+  $updatePasswordForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const passwordCurrent = document.getElementById('passwordCurrent').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password').value;
+    $updatePasswordButton.textContent = 'Updatting...';
+
+    const res = await updateSetting(
+      { passwordCurrent, password, passwordConfirm },
+      'password'
+    );
+
+    $updatePasswordButton.textContent = 'Update password';
+    if (res === 'success') {
+      document.getElementById('passwordCurrent').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('passwordConfirm').value = '';
+    }
+  });

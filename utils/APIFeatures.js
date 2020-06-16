@@ -36,7 +36,7 @@ class APIFeatures {
   }
 
   limitFields() {
-    if (this.querrObject.fields) {
+    if (this.queryObject.fields) {
       const selectBy = this.queryObject.fields.split(',').join(' ');
       this.query = this.query.select(selectBy);
     } else {

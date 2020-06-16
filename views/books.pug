@@ -1,0 +1,13 @@
+extends base
+
+block content 
+  .container
+    .row.my-3
+      each book in books
+        .col-6
+          .border.border-dark.p-3.mb-3
+            h2 Name: #{book.name}
+            p Author: #{book.author}
+            p Shop: #{book.shop.name}
+            p Price: #{book.price}
+            button.btn.btn-info Add to cart

@@ -6,9 +6,11 @@ const APIFeatures = require('../utils/APIFeatures');
 // 1) get me - get one
 exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
-    let query = Model.find(req.params.id);
+    let query = Model.findById(req.params.id);
     if (popOptions) {
-      query = query.populate(popOptions);
+      popOptions.forEach(popOption => {
+        query = query.populate(popOption);
+      });
     }
 
     const doc = await query;

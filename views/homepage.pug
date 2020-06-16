@@ -1,4 +1,13 @@
 extends base
 
 block content 
-  h1 HomePage
+  .container
+    .row.my-3
+      each shop in shops
+        .col-4
+          .border.border-dark.p-3
+            h2 #{shop.name}
+            p #{shop.description}
+            p Quantity: #{shop.nBooks} books
+            a.btn.btn-info(href=`/shop/${shop.slug}`) Detail shop
+            

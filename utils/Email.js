@@ -11,24 +11,16 @@ class Email {
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'development') {
-      return nodeMailer.createTransport({
-        host: process.env.MAILTRAP_HOST,
-        post: process.env.MAILTRAP_POST,
-        auth: {
-          user: process.env.MAILTRAP_USERNAME,
-          pass: process.env.MAILTRAP_PASSWORD
-        }
-      });
-    }
-
-    // return nodeMailer.createTransport({
-    //   service: 'SendGrid',
-    //   auth: {
-    //     user: ,
-    //     pass:
-    //   }
-    // });
+    // if (process.env.NODE_ENV === 'development') {
+    return nodeMailer.createTransport({
+      host: process.env.MAILTRAP_HOST,
+      post: process.env.MAILTRAP_POST,
+      auth: {
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD
+      }
+    });
+    // }
   }
 
   async send(template, subject) {

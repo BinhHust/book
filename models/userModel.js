@@ -47,11 +47,15 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin', 'manager']
     },
     changedPasswordAt: Date,
-    verifyToken: String
+    verifyToken: String,
+    shop: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Shop'
+    }
   },
   {
-    toJSON: { virtual: true },
-    toObject: { virtual: true }
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
 
@@ -66,6 +70,13 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+userSchema.pre('save', function(next) {
+  if (this.isNew || !this.isModified('password')) return next();
+
+  this.changedPasswordAt = Date.now() - 1000;
+  return next();
+});
+
 // 2) query middleware
 // userSchema.pre('find', function(next) {
 //   this.find({
@@ -76,8 +87,8 @@ userSchema.pre('save', async function(next) {
 // });
 
 // 3) instance methods
-userSchema.methods.isCorrectPassword = async function(pwFromUse, pwInDB) {
-  return await bcrypt.compare(pwFromUse, pwInDB);
+userSchema.methods.isCorrectPassword = async function(pwFromUser, pwInDB) {
+  return await bcrypt.compare(pwFromUser, pwInDB);
 };
 
 userSchema.methods.isChangedPassword = function(createdTokenAt) {

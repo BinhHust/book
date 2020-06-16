@@ -19,4 +19,14 @@ router
   .route('/verifyEmail/:verifyToken')
   .get(authController.isLoggedIn, viewController.getVerifyEmailPage);
 
+router.get('/me', authController.protect, viewController.getAccountPage);
+
+router.get(
+  '/shop/:slugShop',
+  authController.isLoggedIn,
+  viewController.getDetailShopPage
+);
+
+router.get('/books', authController.isLoggedIn, viewController.getBooksPage);
+
 module.exports = router;

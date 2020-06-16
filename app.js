@@ -6,6 +6,8 @@ const AppError = require('./utils/AppError');
 const globalErrorHander = require('./controllers/errorController');
 const userRouter = require('./routers/userRouter.js');
 const viewRouter = require('./routers/viewRouter.js');
+const shopRouter = require('./routers/shopRouter.js');
+const bookRouter = require('./routers/bookRouter.js');
 
 // Start express app
 const app = express();
@@ -52,6 +54,8 @@ app.use((req, res, next) => {
 // 2) ROUTES
 app.use('/', viewRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/shops', shopRouter);
+app.use('/api/v1/books', bookRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`${req.originalUrl} not found.`, 400));
