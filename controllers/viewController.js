@@ -54,3 +54,9 @@ exports.getBooksPage = catchAsync(async (req, res, next) => {
     books
   });
 });
+
+exports.getCartPage = catchAsync(async (req, res, next) => {
+  res.status(200).render('cart', {
+    title: 'Cart'
+  });
+});

@@ -141,8 +141,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // user exists ?
   const currentUser = await User.findOne({
-    _id: decode.id,
-    active: true
+    _id: decode.id
   }).populate('shop');
 
   if (!currentUser) {
@@ -169,7 +168,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      const currentUser = await User.findOne({ _id: decode.id, active: true });
+      const currentUser = await User.findOne({ _id: decode.id });
 
       if (!currentUser) {
         return next();
@@ -203,7 +202,7 @@ exports.restrict = (...roles) => (req, res, next) => {
 // NOTE: Update Password
 exports.updatePassword = catchAsync(async (req, res, next) => {
   const { passwordCurrent, password, passwordConfirm } = req.body;
-  console.log(passwordCurrent, password, passwordConfirm);
+
   // get user
   const user = await User.findById(req.user.id).select('+password');
 

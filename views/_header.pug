@@ -7,6 +7,9 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
       li.nav-item
         a.nav-link(href="/books")
           | Books 
+      if nBook
+        li.nav-item
+          a.nav-link(href="/cart")= `Cart(${nBook})` 
     if user
       button.btn.btn-danger#logout Log out 
       a.btn(href='/me')

@@ -1,0 +1,18 @@
+extends base
+
+block content
+  .container
+    .row.my-3
+      each book in booksInCart
+        .col-6
+          .border.border-dark.p-3.mb-3
+            h2 Name: #{book.name}
+            p Author: #{book.author}
+            p Shop: #{book.shop.name}
+            p= `Price: $${book.price}`
+            p Quantity: #{book.quantity}
+            button.btn.btn-danger(data-book-id=`${book.id}`) Delete
+    if (!total || total === 0)
+      h2 No book In cart
+    else
+      h2= `TOTAL: $${total}`

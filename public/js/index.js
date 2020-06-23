@@ -3,15 +3,20 @@ import '@babel/polyfill';
 import { verifyToken } from './verifyToken';
 import { signup, logout, login } from './auth';
 import { updateSetting } from './updateSetting';
+import { addToCart } from './cart';
 
 const $verifyEmail = document.querySelector('.verify-email');
 const $signupForm = document.getElementById('signup-form');
 const $signupContainer = document.getElementById('signup-container');
+
 const $loginForm = document.getElementById('login-form');
 const $logoutBtn = document.getElementById('logout');
+
 const $updateDataForm = document.getElementById('update-data-form');
 const $updatePasswordForm = document.getElementById('update-password-form');
 const $updatePasswordButton = document.getElementById('update-password-button');
+
+const $booksContainer = document.getElementById('booksContainer');
 
 if ($verifyEmail) {
   $verifyEmail.addEventListener('click', () => {
@@ -83,3 +88,15 @@ if ($updatePasswordForm)
       document.getElementById('passwordConfirm').value = '';
     }
   });
+
+if ($booksContainer) {
+  $booksContainer.addEventListener('click', e => {
+    const $addToCartBtn = e.target.closest('#addToCart');
+    if ($addToCartBtn) {
+      const bookId = $addToCartBtn.dataset.bookId;
+      // console.log(bookId);
+      $addToCartBtn.textContent = 'Adding...';
+      addToCart(bookId);
+    }
+  });
+}

@@ -2,8 +2,11 @@ const express = require('express');
 
 const viewController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
+const cartController = require('../controllers/cartController');
 
 const router = express.Router();
+
+router.use(cartController.isShopping);
 
 router.route('/').get(authController.isLoggedIn, viewController.getHomePage);
 
@@ -28,5 +31,12 @@ router.get(
 );
 
 router.get('/books', authController.isLoggedIn, viewController.getBooksPage);
+
+router.get(
+  '/cart',
+  authController.isLoggedIn,
+  cartController.getBooksForCart,
+  viewController.getCartPage
+);
 
 module.exports = router;
