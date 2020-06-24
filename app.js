@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const compression = require('compression');
 
 const AppError = require('./utils/AppError');
 const globalErrorHander = require('./controllers/errorController');
@@ -62,6 +63,7 @@ app.use(cookieParser());
 // 1.11) Prevent parameter pollution
 
 // 1.12) Compression
+app.use(compression());
 
 // 1.13) Test middleware
 app.use((req, res, next) => {

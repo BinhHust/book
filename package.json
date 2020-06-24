@@ -7,7 +7,7 @@
     "start:dev": "nodemon server.js",
     "start:prod": "env NODE_ENV=production nodemon server.js",
     "watch:js": "parcel watch ./public/js/index.js --out-dir ./public --out-file bundler.js",
-    "biuld:js": "parcel biuld ./public/js/index.js --out-dir ./public --out-file bundler.js"
+    "build:js": "parcel build ./public/js/index.js --out-dir ./public --out-file bundler.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "@babel/polyfill": "^7.10.1",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
     "connect-mongodb-session": "^2.3.3",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
