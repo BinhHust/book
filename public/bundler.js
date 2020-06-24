@@ -8648,7 +8648,7 @@ exports.updateSetting = updateSetting;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addToCart = void 0;
+exports.actionToCart = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -8660,21 +8660,34 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var addToCart = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(bookId) {
-    var res;
+var actionToCart = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(type, bookId) {
+    var url, res;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return (0, _axios.default)({
-              method: 'GET',
-              url: "/api/v1/cart/addToCart/".concat(bookId)
-            });
+            _context.t0 = type;
+            _context.next = _context.t0 === 'add' ? 3 : _context.t0 === 'delete' ? 5 : 7;
+            break;
 
           case 3:
+            url = "/api/v1/cart/addToCart/".concat(bookId);
+            return _context.abrupt("break", 7);
+
+          case 5:
+            url = "/api/v1/cart/deleteToCart/".concat(bookId);
+            return _context.abrupt("break", 7);
+
+          case 7:
+            _context.prev = 7;
+            _context.next = 10;
+            return (0, _axios.default)({
+              method: 'GET',
+              url: url
+            });
+
+          case 10:
             res = _context.sent;
 
             if (res.data.status === 'success') {
@@ -8684,28 +8697,28 @@ var addToCart = /*#__PURE__*/function () {
               }, 1500);
             }
 
-            _context.next = 10;
+            _context.next = 17;
             break;
 
-          case 7:
-            _context.prev = 7;
-            _context.t0 = _context["catch"](0);
-            (0, _alert.showAlert)(_context.t0.response.data.message, 'error');
+          case 14:
+            _context.prev = 14;
+            _context.t1 = _context["catch"](7);
+            (0, _alert.showAlert)(_context.t1.response.data.message, 'error');
 
-          case 10:
+          case 17:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 7]]);
+    }, _callee, null, [[7, 14]]);
   }));
 
-  return function addToCart(_x) {
+  return function actionToCart(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
 
-exports.addToCart = addToCart;
+exports.actionToCart = actionToCart;
 },{"axios":"../../node_modules/axios/index.js","./alert":"alert.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -8986,6 +8999,7 @@ var $updateDataForm = document.getElementById('update-data-form');
 var $updatePasswordForm = document.getElementById('update-password-form');
 var $updatePasswordButton = document.getElementById('update-password-button');
 var $booksContainer = document.getElementById('booksContainer');
+var $cartContainer = document.getElementById('cartContainer');
 
 if ($verifyEmail) {
   $verifyEmail.addEventListener('click', function () {
@@ -9132,7 +9146,20 @@ if ($booksContainer) {
       var bookId = $addToCartBtn.dataset.bookId; // console.log(bookId);
 
       $addToCartBtn.textContent = 'Adding...';
-      (0, _cart.addToCart)(bookId);
+      (0, _cart.actionToCart)('add', bookId);
+    }
+  });
+}
+
+if ($cartContainer) {
+  $cartContainer.addEventListener('click', function (e) {
+    var $deleteToCartBtn = e.target.closest('#deleteToCart');
+
+    if ($deleteToCartBtn) {
+      var bookId = $deleteToCartBtn.dataset.bookId; // console.log(bookId);
+
+      $deleteToCartBtn.textContent = 'Deleting...';
+      (0, _cart.actionToCart)('delete', bookId);
     }
   });
 }
@@ -9164,7 +9191,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59910" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65115" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

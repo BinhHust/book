@@ -88,3 +88,26 @@ exports.addToCart = catchAsync(async (req, res, next) => {
     });
   });
 });
+
+exports.deleteToCart = catchAsync(async (req, res, next) => {
+  const { bookId } = req.params;
+
+  const book = await Book.findById(bookId);
+
+  if (!book) {
+    return next(new AppError('No book belongs to this id.', 404));
+  }
+
+  const deletedItems = req.session.cart.items.filter(
+    item => item.bookId !== bookId
+  );
+
+  req.session.cart.items = deletedItems;
+
+  req.session.save(() => {
+    res.status(200).json({
+      status: 'success',
+      message: `'${book.name}' is deleted to the cart successfully.`
+    });
+  });
+});

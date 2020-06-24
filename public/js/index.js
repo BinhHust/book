@@ -3,7 +3,7 @@ import '@babel/polyfill';
 import { verifyToken } from './verifyToken';
 import { signup, logout, login } from './auth';
 import { updateSetting } from './updateSetting';
-import { addToCart } from './cart';
+import { actionToCart } from './cart';
 
 const $verifyEmail = document.querySelector('.verify-email');
 const $signupForm = document.getElementById('signup-form');
@@ -17,6 +17,7 @@ const $updatePasswordForm = document.getElementById('update-password-form');
 const $updatePasswordButton = document.getElementById('update-password-button');
 
 const $booksContainer = document.getElementById('booksContainer');
+const $cartContainer = document.getElementById('cartContainer');
 
 if ($verifyEmail) {
   $verifyEmail.addEventListener('click', () => {
@@ -96,7 +97,19 @@ if ($booksContainer) {
       const bookId = $addToCartBtn.dataset.bookId;
       // console.log(bookId);
       $addToCartBtn.textContent = 'Adding...';
-      addToCart(bookId);
+      actionToCart('add', bookId);
+    }
+  });
+}
+
+if ($cartContainer) {
+  $cartContainer.addEventListener('click', e => {
+    const $deleteToCartBtn = e.target.closest('#deleteToCart');
+    if ($deleteToCartBtn) {
+      const bookId = $deleteToCartBtn.dataset.bookId;
+      // console.log(bookId);
+      $deleteToCartBtn.textContent = 'Deleting...';
+      actionToCart('delete', bookId);
     }
   });
 }
