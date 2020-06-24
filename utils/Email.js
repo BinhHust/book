@@ -1,4 +1,5 @@
-const nodeMailer = require('nodemailer');
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
 
@@ -11,16 +12,26 @@ class Email {
   }
 
   newTransport() {
-    // if (process.env.NODE_ENV === 'development') {
-    return nodeMailer.createTransport({
-      host: process.env.MAILTRAP_HOST,
-      post: process.env.MAILTRAP_POST,
-      auth: {
-        user: process.env.MAILTRAP_USERNAME,
-        pass: process.env.MAILTRAP_PASSWORD
-      }
-    });
-    // }
+    if (process.env.NODE_ENV === 'development') {
+      return nodemailer.createTransport({
+        host: process.env.MAILTRAP_HOST,
+        post: process.env.MAILTRAP_POST,
+        auth: {
+          user: process.env.MAILTRAP_USERNAME,
+          pass: process.env.MAILTRAP_PASSWORD
+        }
+      });
+    }
+    return nodemailer.createTransport(
+      smtpTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS
+        }
+      })
+    );
   }
 
   async send(template, subject) {

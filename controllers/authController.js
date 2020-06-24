@@ -60,6 +60,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
       message: 'Check email in order to verify.'
     });
   } catch (err) {
+    console.log(err);
     await User.findByIdAndDelete(newUser._id);
 
     return next(new AppError('Send email verification failed', 400));
